@@ -3,16 +3,20 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "logicAppFEname": {
-        "type": "String"
+        "type": "String",
+        "defaultValue": "[format('lga-{0}', uniqueString(resourceGroup().id))]"
         },
         "fileShareName": {
-        "type": "String"
+        "type": "String",
+        "defaultValue": "fs01"
         },
         "appInsightName": {
-        "type": "String"
+        "type": "String",
+        "defaultValue": "[format('ai-{0}', uniqueString(resourceGroup().id))]"
         },
         "use32BitWorkerProcess": {
-        "type": "Bool"
+        "type": "Bool",
+        "defaultValue": false
         },
         "location": {
         "defaultValue": "[resourceGroup().location]",
@@ -22,54 +26,63 @@
         }
         },
         "hostingPlanFEName": {
-        "type": "String"
+        "type": "String",
+        "defaultValue": "[format('lga-host-plan-{0}', uniqueString(resourceGroup().id))]"
         },
         "contentStorageAccountName": {
-        "type": "String"
+        "type": "String",
+        "defaultValue": "[format('lgacontent{0}', uniqueString(resourceGroup().id))]"
         },
 
         "sku": {
-        "type": "String"
+        "type": "String",
+        "defaultValue": "workflowStandard"
         },
         "skuCode": {
-        "type": "String"
+        "type": "String",
+        "defaultValue": "WS1"
         },
         "workerSize": {
-        "type": "String"
+        "type": "String",
+        "defaultValue": "3"
         },
         "workerSizeId": {
-        "type": "String"
+        "type": "String",
+        "defaultValue": "3"
         },
         "numberOfWorkers": {
-        "type": "String"
+        "type": "String",
+        "defaultValue": "1"
         },
         "vnetName": {
         "defaultValue": "VirtualNetwork",
         "type": "String",
+        "defaultValue": "[format('vnet-{0}', uniqueString(resourceGroup().id))]",
         "metadata": {
             "description": "Name of the VNET that the Function App and Storage account will communicate over."
         }
         },
         "subnetName": {
-        "type": "String"
+        "type": "String",
+        "defaultValue": "[format('sbn-{0}', uniqueString(resourceGroup().id))]"
         },
 
         "virtualNetworkAddressPrefix": {
-        "defaultValue": "10.100.0.0/16",
+        "defaultValue": "10.200.0.0/16",
         "type": "String",
         "metadata": {
             "description": "VNET address space."
         }
         },
         "functionSubnetAddressPrefix": {
-        "defaultValue": "10.100.0.0/24",
+        "defaultValue": "10.200.0.0/24",
         "type": "String",
         "metadata": {
             "description": "Function App's subnet address range."
         }
         },
         "privateEndpointSubnetAddressPrefix": {
-        "defaultValue": "10.100.1.0/24",
+        "defaultValue": "10.200.1.0/24",
         "type": "String",
         "metadata": {
             "description": "Storage account's private endpoint's subnet address range."
