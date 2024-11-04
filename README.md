@@ -53,25 +53,30 @@ Workflow Service 는 공용으로 사용되는 환경에서 워크플로를 할�
 ### Control
 If, Switch, For, do-until 등과 같이 제어를 하기 위한 작업
 예시) 트리거가 실행된 결과에 어떤 문자열이 포함되어 있는 경우에는 Condition 이 사용될 수 있고, 임계값을 여러 단계로 설정한 경우에는 Switch 를 이용할 수 있음.
+
 ![](images/2024-10-31-11-12-44.png)
 
 ### Data Operations
 ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
 데이터 가공하여 전체 워크플로를 단순화 가능
+
 ![](images/2024-10-31-11-16-19.png)
 
 ### Variables
 변수설정과 관련된 작업으로 변수를 선언(initalize) 하거나 값 할당(Set variable), 값 변경(Increment, Append) 작업
+
 ![](images/2024-10-31-11-20-22.png)
 
 ### Inline Code
 자바스크립트 코드에 익숙한 경우 복잡한 로직을 단순화 하기 위해 인라인 자바스크립트 코드를 사용하여 워크를로 작성에 도움을 줌. 
+
 ![](images/2024-10-31-11-22-05.png)
 ![](images/2024-10-31-11-23-43.png)
 
 ### Connectors
 빌트인 커넥터 또는 사용자 정의 커넥터를 호출하여 필요한 작업을 실행
 예시) 아웃룩을 통해 이메일 발송, Slack 의 특정 채널에 메시지 작성
+
 ![](images/2024-10-31-11-24-40.png)
 
 ## 3. Configurations(설정)
@@ -89,11 +94,13 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
 
 ### Testing
 정적 결과로써 작업이 정상적으로 수행되는지 테스트 하기 위한 테스트 로직 (_테스트 로직이 활성화된 상태인 경우 작업의 우측하단에 비이커 모양의 아이콘이 활성화_)
+
 ![](images/2024-10-31-13-10-27.png)
 
 ### Secure I/O
 특정 작업이 보호되어야 할 값이 있는 경우 Security 의 Secure inputs, Secure outputs 을 활성화 하여 실행 결과을 숨길 수 있음. 
 또한 구성 설정의 Workflow settings 메뉴에서 허용된 IP 만 접근 허용 설정을 통해 로직앱 접속 [제한](https://learn.microsoft.com/ko-kr/azure/logic-apps/logic-apps-securing-a-logic-app?tabs=azure-portal) 가능
+
 ![](images/2024-10-31-13-16-06.png)
 
 
@@ -117,7 +124,9 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
         - Subnets
             - sbn-lga-lab: 10.241.0.0/24, Subnet Delegation: Microsoft.Web/serverFarms
             - sbn-lga-storage: 10.241.1.0/24, Subnet Delegation: None
+
         ![](images/2024-11-04-10-41-35.png)
+
 3. 스토리지 생성
     - Basic
         - 이름: stglgalab1104
@@ -179,7 +188,9 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
     - Monitoring
         - Enable Application Insights: `Yes`
     - 리소스 생성 후 Stop App
+
     ![](images/2024-11-04-11-06-53.png)
+
     - Settings - Environment variables 에 환경 변수 추가
         - 이름: WEBSITE_CONTENTOVERVNET
         - 값: 1
@@ -188,6 +199,7 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
         - 값: 1
 
         ![](images/2024-11-04-11-10-14.png)
+
     - Logic App 시작 (개요 화면에서 `시작`), 약 3분 후에도 Runtime version 이 Error 인 경우 Restart 시도.
 
 > [!NOTE]  
@@ -243,6 +255,7 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
 
     - 예시로 "Hello, {name}! Your email is {email}"과 같은 메시지를 작성합니다.
     ![](images/2024-10-31-15-01-12.png)
+
 5. `저장` 후 `개요` 화면으로 이동시 생성된 workflow URL을 확인 가능합니다.
 
 ### Lab 1.4: 워크플로우 실행 및 테스트
@@ -256,13 +269,16 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
     ```
 
     - 결과 예시
+
     ![](images/2024-10-31-15-17-29.png)
 
     - 수신된 이메일
+
     ![](images/2024-10-31-15-20-31.png)
 
 4. 결과 확인: Logic Apps의 실행 상태를 확인하여 조건에 맞는 메시지가 전송되었는지 확인합니다.
     - Standard 인 경우 `Log stream` 을 활성화 하여 호출자의 요청을 실시간으로 모니터링 (Consumption 에서는 지원 x)
+
     ![](images/2024-10-31-15-27-15.png)
 
 ### Lab 1.5: 결과 정리
@@ -369,8 +385,9 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
 4. 트리거 설정:
     - Storage Account 연결: 앞서 생성한 Blob Storage 계정을 연결합니다.
     - Blob Path: mycontainer 컨테이너를 입력합니다.
-    
+
     ![](images/2024-10-31-17-52-23.png)
+    
 5. 저장을 눌러 트리거 설정을 완료합니다.
 
 ### Lab 3.3: 파일 처리 워크플로우 설정
@@ -378,7 +395,9 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
     - Outlook이나 Gmail을 사용하여 파일 업로드 시 이메일 알림을 설정합니다.
     - 이메일 제목: "새 파일이 업로드되었습니다: {파일 이름}"
     - 이메일 본문: "{파일 이름} 파일이 업로드되었습니다. 확인이 필요합니다."
+
     ![](images/2024-10-31-17-53-34.png)
+
 2. 파일 메타데이터 가져오기: 필요한 경우 Get file metadata 작업을 추가하여 업로드된 파일의 크기, 유형 등 메타데이터를 추가로 가져올 수 있습니다.
 3. 조건부 흐름 설정 (선택 사항):
     - 예를 들어, 파일 크기에 따라 추가적인 알림이나 다른 경로로 분기하도록 설정할 수 있습니다.
