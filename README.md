@@ -369,6 +369,7 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
 4. 트리거 설정:
     - Storage Account 연결: 앞서 생성한 Blob Storage 계정을 연결합니다.
     - Blob Path: mycontainer 컨테이너를 입력합니다.
+    
     ![](images/2024-10-31-17-52-23.png)
 5. 저장을 눌러 트리거 설정을 완료합니다.
 
