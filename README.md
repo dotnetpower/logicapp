@@ -102,6 +102,97 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
 
 # Hands-on
 
+## Lab 0. (선택)Private 네트워크 환경에 Logic App 생성
+[프라이빗 엔드포인트를 사용하여 프라이빗 스토리지 계정에 단일 테넌트 표준 논리 앱 배포](https://learn.microsoft.com/ko-kr/azure/logic-apps/deploy-single-tenant-logic-apps-private-storage-account#deploy-using-azure-portal-or-visual-studio-code) 문서에 설명된것과 같이 구성을 하거나, 다음 절차로 환경을 구성합니다.
+
+1. 리소스 그룹 생성
+    - 지역을 `Korea Central` 이나 가까운 지역으로 선택하여 리소스 그룹을 생성
+    - 예시) rg-lga-lab
+2. 가상 네트워크 생성
+    - 생성된 리소스 그룹내에서 `virtual network` 생성
+    - Basic
+        - 이름: vnet-lga-lab
+    - IP addresses (IP는 계획에 따라 조정 필요)
+        - IP : 10.241.0.0/16
+        - Subnets
+            - sbn-lga-lab: 10.241.0.0/24, Subnet Delegation: Microsoft.Web/serverFarms
+            - sbn-lga-storage: 10.241.1.0/24, Subnet Delegation: None
+        ![](images/2024-11-04-10-41-35.png)
+3. 스토리지 생성
+    - Basic
+        - 이름: stglgalab1104
+    - Networking
+        - Network access: Disable public access and use private access
+        - Private endpoint 는 리소스 생성 이후 설정 예정
+    - 리소스 생성
+    - 리소스 생성완료 후 Security + networking 메뉴의 Private endpoint connections 에서 `+ Private endpoint` 선택
+        - Blob 을 위한 PE 생성
+            - Basic
+                - 이름: pe-blob
+            - Resource
+                - Target sub-resource: blob
+            - Networking
+                - Virtual network: vnet-lga-lab
+                - Subnet: sbn-lga-storage
+            - DNS: 필요시 변경
+        - File을 위한 PE 생성
+            - Basic
+                - 이름: pe-file
+            - Resource
+                - Target sub-resource: file
+            - Networking
+                - Virtual network: vnet-lga-lab
+                - Subnet: sbn-lga-storage
+            - DNS: 필요시 변경
+        - Queue를 위한 PE 생성
+            - Basic
+                - 이름: pe-queue
+            - Resource
+                - Target sub-resource: queue
+            - Networking
+                - Virtual network: vnet-lga-lab
+                - Subnet: sbn-lga-storage
+            - DNS: 필요시 변경
+        - Table을 위한 PE 생성
+            - Basic
+                - 이름: pe-table
+            - Resource
+                - Target sub-resource: table
+            - Networking
+                - Virtual network: vnet-lga-lab
+                - Subnet: sbn-lga-storage
+            - DNS: 필요시 변경
+4. Logic App 생성
+    - 호스팅 옵션: Standard, Workflow Service Plan
+    - Basic
+        - 이름: lga-lab-1104 (고유한 이름 지정 필요)
+        - 지역: Korea Central
+    - Storage
+        - 저장소 계정: stglgalab1104 (이전 단계에서 생성한 storage account 이름)
+    - Networking
+        - Enable public access: `On`
+        - Enable network injection: `On`
+        - Virtual Network: `vnet-lga-lab`
+        - Inbound access: `Off`
+        - Outbound access: `On`
+        - Outbound subnet: `sbn-lga-lab` (Vnet 생성시 구성한 subnet)
+    - Monitoring
+        - Enable Application Insights: `Yes`
+    - 리소스 생성 후 Stop App
+    ![](images/2024-11-04-11-06-53.png)
+    - Settings - Environment variables 에 환경 변수 추가
+        - 이름: WEBSITE_CONTENTOVERVNET
+        - 값: 1
+
+        - 이름: WEBSITE_VNET_ROUTE_ALL
+        - 값: 1
+        ![](images/2024-11-04-11-10-14.png)
+    - Logic App 시작 (개요 화면에서 `시작`), 약 3분 후에도 Runtime version 이 Error 인 경우 Restart 시도.
+> [!NOTE]  
+> Logic App 의 Inbound 트래픽을 Private Endpoint 로 구성하기 위해서는 다음 문서 참고 - [프라이빗 엔드포인트를 사용하여 표준 논리 앱과 Azure 가상 네트워크 간의 트래픽 보호](https://learn.microsoft.com/ko-kr/azure/logic-apps/secure-single-tenant-workflow-virtual-network-private-endpoint) 
+
+ [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdotnetpower%2Flogicapp%2Fmain%2Flogicapp-storage-private-endpoint-deploy.json)
+
 ## Lab 1. 기본 워크플로우 생성 및 트리거 설정
 
 ### 목표
@@ -337,7 +428,7 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
     - Aggregation type: 평균(Average)을 선택하여 평균 CPU 사용률을 기준으로 경고가 발생하도록 설정
 5. Action Group 생성:
     - Create action group을 클릭하여 알림을 받을 방법을 설정합니다.
-    - Action Type으로 Logic App을 선택하고, 이 경고를 트리거할 Logic App을 연결합니다.
+    - (**이 단계를 실행하기 전에 Lab 4.3 이 선행되어야 합니다.**)Action Type으로 Logic App을 선택하고, 이 경고를 트리거할 Logic App을 연결합니다.
 
 ### Lab 4.3: Logic App 생성 및 CPU 경고 알림 설정
 1. Azure Portal에서 Logic App을 검색하여 클릭하고 새 Logic App을 만듭니다.
@@ -346,6 +437,62 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
 2. Logic App이 생성되면 Logic App Designer를 엽니다.
 3. 트리거 선택: Logic App Designer에서 When an HTTP request is received 트리거를 추가합니다.
     - 트리거는 Metric Alert의 Action Group에 연결되어, 경고가 발생할 때 Logic App이 호출됩니다.
+    - 다음 예제 payload 를 복사하여, 예제 payload 를 사용하여 스키마 생성 버튼을 클릭 후 붙여넣습니다.
+    - 예제 [Payload](https://learn.microsoft.com/ko-kr/azure/azure-monitor/alerts/alerts-common-schema)
+    ```json
+    {
+    "schemaId": "azureMonitorCommonAlertSchema",
+    "data": {
+        "essentials": {
+        "alertId": "/subscriptions/<subscription ID>/providers/Microsoft.AlertsManagement/alerts/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e",
+        "alertRule": "WCUS-R2-Gen2",
+        "severity": "Sev3",
+        "signalType": "Metric",
+        "monitorCondition": "Resolved",
+        "monitoringService": "Platform",
+        "alertTargetIDs": [
+            "/subscriptions/<subscription ID>/resourcegroups/pipelinealertrg/providers/microsoft.compute/virtualmachines/wcus-r2-gen2"
+        ],
+        "configurationItems": [
+            "wcus-r2-gen2"
+        ],
+        "originAlertId": "3f2d4487-b0fc-4125-8bd5-7ad17384221e_PipeLineAlertRG_microsoft.insights_metricAlerts_WCUS-R2-Gen2_-117781227",
+        "firedDateTime": "2019-03-22T13:58:24.3713213Z",
+        "resolvedDateTime": "2019-03-22T14:03:16.2246313Z",
+        "description": "",
+        "essentialsVersion": "1.0",
+        "alertContextVersion": "1.0"
+        },
+        "alertContext": {
+        "properties": null,
+        "conditionType": "SingleResourceMultipleMetricCriteria",
+        "condition": {
+            "windowSize": "PT5M",
+            "allOf": [
+            {
+                "metricName": "Percentage CPU",
+                "metricNamespace": "Microsoft.Compute/virtualMachines",
+                "operator": "GreaterThan",
+                "threshold": "25",
+                "timeAggregation": "Average",
+                "dimensions": [
+                {
+                    "name": "ResourceId",
+                    "value": "3efad9dc-3d50-4eac-9c87-8b3fd6f97e4e"
+                }
+                ],
+                "metricValue": 7.727
+            }
+            ]
+        }
+        },
+        "customProperties": {
+        "Key1": "Value1",
+        "Key2": "Value2"
+        }
+    }
+    }
+    ```
 4. 이메일 알림 또는 Teams 메시지 작업 추가:
     - HTTP 요청을 트리거로 받으면 이메일 또는 Teams 메시지를 보내는 작업을 추가합니다.
     - 메일 내용 설정:

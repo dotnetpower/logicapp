@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "logicAppFEname": {
+        "value": ""
+      },
+      "fileShareName": {
+        "value": "fs01"
+      },
+      "use32BitWorkerProcess": {
+        "value": false
+      },
+      "location": {
+        "value": "koreacentral"
+      },
+      "hostingPlanFEName": {
+        "value": "lga-host-plan"
+      },
+      "contentStorageAccountName": {
+        "value": ""
+      },
+      "sku": {
+        "value": "workflowStandard"
+      },
+      "skuCode": {
+        "value": "WS1"
+      },
+      "workerSize": {
+        "value": "3"
+      },
+      "workerSizeId": {
+        "value": "3"
+      },
+      "numberOfWorkers": {
+        "value": "1"
+      },
+      "vnetName": {
+        "value": "vnet-lga-01"
+      },
+      "subnetName": {
+        "value": "sbn-lga-01"
+      },
+      "virtualNetworkAddressPrefix": {
+        "value": "10.210.0.0/16"
+      },
+      "functionSubnetAddressPrefix": {
+        "value": "10.210.0.0/24"
+      },
+      "privateEndpointSubnetAddressPrefix": {
+        "value": "10.210.1.0/24"
+      }
+    }
+  }
