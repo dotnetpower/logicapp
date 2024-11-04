@@ -186,8 +186,10 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
 
         - 이름: WEBSITE_VNET_ROUTE_ALL
         - 값: 1
+
         ![](images/2024-11-04-11-10-14.png)
     - Logic App 시작 (개요 화면에서 `시작`), 약 3분 후에도 Runtime version 이 Error 인 경우 Restart 시도.
+
 > [!NOTE]  
 > Logic App 의 Inbound 트래픽을 Private Endpoint 로 구성하기 위해서는 다음 문서 참고 - [프라이빗 엔드포인트를 사용하여 표준 논리 앱과 Azure 가상 네트워크 간의 트래픽 보호](https://learn.microsoft.com/ko-kr/azure/logic-apps/secure-single-tenant-workflow-virtual-network-private-endpoint) 
 
@@ -209,7 +211,7 @@ ParseJSON, Join 등과 같이 데이터를 처리, 가공하기 위한 작업
 
 ### Lab 1.1: Logic App 만들기
 1. Azure Portal에 로그인하고, Logic App 서비스를 검색하여 클릭합니다.
-2. Logic App Designer에서 새 Logic App을 생성합니다.
+2. Logic App Designer에서 새 Logic App을 생성합니다. (Standard 로 생성한 경우 Workflow 생성으로 대체)
     - 리소스 이름: lga-lab01-<alias>
     - 리소스 그룹: 기존 리소스 그룹 선택 또는 새로 생성
     - 리전: KoreaCentral
